@@ -412,18 +412,37 @@ def get_current_task_context(project_path: str) -> dict[str, Any]:
         functions = read_functions(project_path)
         func_map = {func.id: func for func in functions}
 
-        # 3. 查找当前任务（优先 in_progress，其次 pending）
+        # 3. 查找当前任务
+        # 优先返回 in_progress 任务
+        # 其次返回第一个「依赖都已完成或无依赖」的 pending 任务
         in_progress_task: Optional[TaskStatus] = None
-        first_pending_task: Optional[TaskStatus] = None
+        ready_pending_task: Optional[TaskStatus] = None
+
+        def is_task_ready(func_id: str) -> bool:
+            """检查任务是否就绪（依赖都已完成或无依赖）"""
+            func = func_map.get(func_id)
+            if func is None:
+                return False
+            # 无依赖，直接就绪
+            if not func.dependencies:
+                return True
+            # 检查所有依赖是否已完成
+            for dep_id in func.dependencies:
+                dep_task = progress.tasks.get(dep_id)
+                if dep_task is None or dep_task.status != TaskStatusEnum.COMPLETED:
+                    return False
+            return True
 
         for func_id, task in progress.tasks.items():
             if task.status == TaskStatusEnum.IN_PROGRESS and in_progress_task is None:
                 in_progress_task = task
                 break
-            elif task.status == TaskStatusEnum.PENDING and first_pending_task is None:
-                first_pending_task = task
+            elif task.status == TaskStatusEnum.PENDING and ready_pending_task is None:
+                # 只选择依赖已完成的任务
+                if is_task_ready(func_id):
+                    ready_pending_task = task
 
-        current_task = in_progress_task or first_pending_task
+        current_task = in_progress_task or ready_pending_task
 
         # 如果没有待处理任务
         if current_task is None:
