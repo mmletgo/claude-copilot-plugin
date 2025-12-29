@@ -164,21 +164,67 @@ If user requests changes to business requirements or function behavior:
       - Update affected requirement descriptions
       - Add change record
 
-   b. **docs/architecture.md**:
-      - Update function's Business Logic field
-      - Update Code Logic if affected
-      - Update Test Cases if affected
-      - Update Dependencies/Called by if affected
+   b. **docs/architecture.json**:
+      - Update data_structures if affected
+      - Update technical_stack if new dependencies added
+
+   c. **docs/functions.json**:
+      - Update function's business_logic field
+      - Update code_logic if affected
+      - Update test_cases if affected
+      - Update dependencies/called_by if affected
       - Check if other functions are impacted
 
-   c. Update task notes via `task_status_update`
+   d. **docs/progress.json**:
+      - Add change_log entry describing the modification
 
-3. **Re-implement** based on updated architecture
+   e. Update task notes via `task_status_update`
+
+3. **Re-implement** based on updated documents
 4. **Update/Add tests** to match new behavior
 5. **Run tests** to verify
 6. Confirm with user
 
-#### Case C: Approved
+#### Case C: Add new function (IMPORTANT)
+If user requests adding a new function during implementation:
+
+1. **Confirm the new function**:
+   - Ask: "需要新增函数 [function_name]，我需要更新相关文档。确认新函数：[描述功能]，对吗？"
+
+2. **Update documents**:
+
+   a. **docs/functions.json** - Add new function entry:
+      ```json
+      {
+        "id": "F_NEW_ID",
+        "name": "new_function_name",
+        "file": "path/to/file.py",
+        "signature": "def new_function(...) -> ...",
+        "business_logic": "为什么需要这个函数",
+        "code_logic": "这个函数做什么",
+        "test_cases": ["测试用例1", "测试用例2"],
+        "dependencies": ["依赖的函数ID"],
+        "called_by": ["调用方函数ID"],
+        "uses": ["使用的外部库"]
+      }
+      ```
+
+   b. **docs/progress.json**:
+      - Add new task entry in tasks array
+      - Update summary.total count
+      - Add change_log entry
+
+   c. **docs/architecture.json** (if needed):
+      - Update data_structures if new types added
+
+   d. **docs/prd.md** (if exists):
+      - Update related requirement descriptions
+
+3. **Decide implementation order**:
+   - If new function is dependency of current task: implement new function first
+   - If new function depends on current task: implement current task first, then new function
+
+#### Case D: Approved
 If user approves:
 - Ask: "继续下一个任务吗？"
 
@@ -192,14 +238,14 @@ If user approves:
 
 ### Context Loading
 - **Use MCP tools** to load context efficiently
-- **NEVER** load full architecture - only extract relevant parts via `function_with_deps`
-- **NEVER** modify architecture.md directly unless business logic changes - it's the source of truth
+- **NEVER** load full architecture - only extract relevant parts via MCP `current_task_context`
+- **NEVER** modify docs/*.json directly unless business logic changes - they are the source of truth
 
 ### Implementation
 - **ALWAYS** follow function signatures from MCP response
 - **ALWAYS** update task status via MCP after each task
 - Keep context minimal to save tokens
-- If architecture needs change, tell user to run /plan again
+- If major architecture needs change, tell user to run /plan again
 
 ### Testing (CRITICAL)
 - **MUST** write tests for every function implemented
@@ -208,7 +254,8 @@ If user approves:
 - If tests fail, fix and re-run until all pass
 
 ### Document Updates (when business logic changes)
-- **ALWAYS** update docs when user modifies business requirements
-- Update order: prd.md (if exists) -> architecture.md -> task notes via MCP
+- **ALWAYS** update docs when user modifies business requirements or adds new functions
+- Update order: prd.md -> architecture.json -> functions.json -> progress.json -> task notes via MCP
 - **MUST** check if changes impact other functions
 - **MUST** confirm change scope with user before updating
+- **MUST** keep functions.json and progress.json in sync (same function IDs)
