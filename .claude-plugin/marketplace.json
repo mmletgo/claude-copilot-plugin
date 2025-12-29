@@ -1,0 +1,16 @@
+{
+  "name": "claude-copilot",
+  "owner": {
+    "name": "mmletgo",
+    "email": "zhengrongh@126.com"
+  },
+  "plugins": [
+    {
+      "name": "claude-copilot",
+      "source": "./plugins/claude-copilot",
+      "description": "AI 主驾开发模式：Claude 主导开发，人类监督审核。包含 /plan（项目规划）和 /impl（交互式实现）命令，以及 MCP 进度追踪工具。",
+      "version": "1.0.0",
+      "keywords": ["ai-driven", "project-management", "interactive-development", "mcp"]
+    }
+  ]
+}
