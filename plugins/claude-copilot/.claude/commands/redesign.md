@@ -1,5 +1,5 @@
 ---
-name: replan
+name: redesign
 description: Refactor architecture - modify existing architecture while preserving completed work (user)
 allowed-tools: Read, Edit, Write, Bash, Grep, Glob, TodoWrite, AskUserQuestion, mcp__project-tracker__project_status, mcp__project-tracker__current_task_context, mcp__project-tracker__task_status_update, mcp__project-tracker__architecture_overview
 ---

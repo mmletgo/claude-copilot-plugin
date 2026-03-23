@@ -1,5 +1,5 @@
 ---
-name: plan
+name: design
 description: Project planning - discuss requirements, define complete architecture with all classes/functions/dependencies (user)
 allowed-tools: Read, Write, Edit, Glob, Grep, TodoWrite
 ---

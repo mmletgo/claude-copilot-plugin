@@ -66,12 +66,12 @@ claude mcp add --transport stdio project-tracker --scope user -- python /path/to
 
 ## 使用方法
 
-### 第一步：项目规划 (`/plan`)
+### 第一步：项目规划 (`/design`)
 
 在项目根目录运行：
 
 ```bash
-/plan
+/design
 ```
 
 **工作流程：**
@@ -88,7 +88,7 @@ claude mcp add --transport stdio project-tracker --scope user -- python /path/to
 **示例对话：**
 
 ```
-用户: /plan 实现一个用户认证模块
+用户: /design 实现一个用户认证模块
 
 AI: 我的理解是：
 - 需要实现用户注册、登录、登出功能
@@ -192,12 +192,12 @@ AI: [更新 docs/prd.md, docs/architecture.json, docs/functions.json]
 [重新实现函数和测试]
 ```
 
-### 第三步：架构重构 (`/replan`)
+### 第三步：架构重构 (`/redesign`)
 
 当开发过程中发现需要重大架构改动时：
 
 ```bash
-/replan
+/redesign
 ```
 
 **使用场景：**
@@ -216,7 +216,7 @@ AI: [更新 docs/prd.md, docs/architecture.json, docs/functions.json]
 **示例对话：**
 
 ```
-用户: /replan
+用户: /redesign
 
 AI: 当前进度：
 已完成：15 / 30 (50%)
@@ -324,7 +324,7 @@ AI: [更新文档，保留已完成的 F1-F8，将 F9-F12 标记为 pending]
 
 ## 最佳实践
 
-1. **先规划后实现**：始终先运行 `/plan`，确保架构设计完整
+1. **先规划后实现**：始终先运行 `/design`，确保架构设计完整
 2. **保持专注**：每次 `/impl` 只实现一个函数
 3. **及时反馈**：对 AI 的理解和实现方案提出修改建议
 4. **定期审查**：查看生成的代码和文档，确保质量

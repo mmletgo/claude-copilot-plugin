@@ -245,7 +245,7 @@ If user approves:
 - **ALWAYS** follow function signatures from MCP response
 - **ALWAYS** update task status via MCP after each task
 - Keep context minimal to save tokens
-- If major architecture needs change, tell user to run /plan again
+- If major architecture needs change, tell user to run /design again
 
 ### Testing (CRITICAL)
 - **MUST** write tests for every function implemented
